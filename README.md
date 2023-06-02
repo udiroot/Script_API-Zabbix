@@ -12,6 +12,6 @@ Para URL´s Zabbix que possuem SSL, já esta com uma função que ignora a verif
 
 ## REQUISITOS PARA RODAR NO VSCODE OU NO PYTHON VIA CLI ##
 Importar o módulo openpyxl<br>
-Importar o módulo pyzabbix
-Importar o módulo ZabbixAPI
-Importar o módulo tqdm
+Importar o módulo pyzabbix<br>
+Importar o módulo ZabbixAPI<br>
+Importar o módulo tqdm<br>
