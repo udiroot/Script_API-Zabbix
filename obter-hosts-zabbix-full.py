@@ -4,48 +4,48 @@ import openpyxl
 from pyzabbix import ZabbixAPI
 from tqdm import tqdm
 
-# URL da API do Zabbix
+# API ZABBIX
 zapi = ZabbixAPI('http://192.168.0.19:8080/api_jsonrpc.php')
 
-# Credenciais
+# CREDENCIAIS
 username = "Admin"
 password = "zabbix"
 
-# Enable HTTP auth
+# ATIVA O HTTP
 zapi.session.auth = (username, password)
 
-# Disable SSL certificate verification
+# IGNORA O SSL DA URL
 zapi.session.verify = False
 
-# Login (in case of HTTP Auth, only the username is needed, the password, if passed, will be ignored)
+# INÍCIO DE SESSÃO (NO CASO DE AUTENTICAÇÃO HTTP, SÓ É NECESSÁRIO O NOME DE UTILIZADOR; A PALAVRA-PASSE, SE FOR PASSADA, SERÁ IGNORADA)
 zapi.login(username, password)
 
-# Obter informações dos hosts
+# OBTER INFORMAÇÃOS DOS HOSTS
 hosts = zapi.host.get(output=['hostid', 'host', 'name', 'status', 'groups', 'interfaces', 'tags', 'parentTemplates',
                               'proxy_hostid'], selectGroups=['groupid', 'name'],
                       selectInterfaces=['interfaceid', 'ip'], selectTags=['tag', 'value'],
                       selectParentTemplates=['templateid', 'name'])
 
-# Cria um novo arquivo XLSX
+# CRIA UM ARQUIVO XLSX
 wb = openpyxl.Workbook()
 
-# Seleciona a primeira planilha
+# SELECIONA A PLANILHA
 ws = wb.active
 
-# Define os nomes das colunas
+# DEFINE O NOME DAS COLUNAS
 columns = ['HOST ID', 'HOSTNAME', 'VISABLE NAME', 'IP', 'PROXYID', 'PROXY NAME', 'STATUS', 'GRUPOS', 'GRUPO ID', 'TAGS', 'TEMPLATES',
            'TAMPLATES ID']
 
-# Define os nomes das colunas na primeira linha da planilha
+# DEFINE O NOME DAS COLUNAS NA PRIMEIRA LINHA DA PLANILHA
 ws.append(columns)
 
-# Obtendo nome dos proxys
+# OBTER NOME DOS PROXYS (CASO TENHA, SE NÃO TIVER O CAMPO FICA VAZIO)
 proxies = zapi.proxy.get(output=['proxyid', 'host'])
 proxy_dict = {p['proxyid']: p['host'] for p in proxies}
 
-# Popula as linhas com informações dos hosts
+# POPULA AS INFORMAÇÕES NAS COLUNAS
 for host in tqdm(hosts): 
-    # Extrai as informações de interesse do objeto do host
+    # EXTRAI AS INFORMAÇÕES
     host_id = host['hostid']
     host_name = host['host']
     host_visible_name = host['name']
@@ -59,12 +59,12 @@ for host in tqdm(hosts):
     host_templates = ', '.join([t['name'] for t in host['parentTemplates']])
     host_templates_ids = ', '.join([t['templateid'] for t in host['parentTemplates']])
     
-    # Cria uma nova linha com as informações do host
+    # CRIA UMA NOVA LINHA COM AS INFORMAÇÕES
     row = [host_id, host_name, host_visible_name, host_ip, host_proxy, host_proxy_name, host_status, host_groups, host_groups_ids,
        host_tags, host_templates, host_templates_ids]
     
-    # Adiciona a linha na planilha
+    # ADICIONA A LINHA NA PLANILHA
     ws.append(row)
 
-# Salva o arquivo XLSX
-wb.save('C:\\FOLER\\info-full-hosts-zabbix.xlsx')
+# EXPORTA O XLSX
+wb.save('C:\\FOLDER\\info-full-hosts-zabbix.xlsx')
