@@ -11,6 +11,7 @@ Ao finalizar ele mostra uma barra de progresso e depois a conclusão da coleta.
 Para URL´s Zabbix que possuem SSL, já esta com uma função que ignora a verificação. Para URL´s que não possui, ele roda do mesmo jeito.
 
 ## REQUISITOS PARA RODAR NO VSCODE OU NO PYTHON VIA CLI ##
+Python 3.6 ou superior
 Importar o módulo openpyxl<br>
 Importar o módulo pyzabbix<br>
 Importar o módulo ZabbixAPI<br>
